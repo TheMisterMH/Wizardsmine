@@ -15,7 +15,7 @@ class topics {
     }
 
     public function get_thread_labels($thread_id){
-        $sql = "SELECT id,label_type FROM thread_labels WHERE thread_id='$thread_id'";
+        $sql = "SELECT * FROM thread_labels WHERE thread_id='$thread_id'";
         $stmt = $this->web_db_connection->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetchAll();
@@ -28,7 +28,7 @@ class topics {
     }
 
     public function thread_label_count($thread_id){
-        $num_rows = $this->web_db_connection->query("SELECT count(*) FROM thread_label WHERE thread_id='$thread_id'")->fetchColumn();
+        $num_rows = $this->web_db_connection->query("SELECT count(*) FROM thread_labels WHERE thread_id='$thread_id'")->fetchColumn();
         return $num_rows;
     }
 

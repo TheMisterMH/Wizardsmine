@@ -77,25 +77,22 @@ class forum {
 
             $thr_count = $topic->thread_count($topic_id);
 
-            for($i = 0; $i < $thr_count; $i++){
+            for($i = 0; $i < $thr_count; $i++) {
 
                 $thread_id = $threads[$i]['id'];
 
-                /*if($topic->thread_label_count($threads[$i]['id']) != "0") {
+                if ($topic->thread_label_count($thread_id) != "0") {
 
+                    $thread_labels = $topic->get_thread_labels($thread_id);
 
-
-                    $labels[$i] = array('got_label' => 'true', $thread_id => $topic->get_thread_labels($thread_id));
+                    $labels[$i] = array('got_label' => 'true', $i => $thread_labels);
 
                 } else {
 
                     $labels[$i] = array('got_label' => 'false');
 
-                }*/
-                $labels[$i] = $topic->thread_label_count($thread_id);
+                }
             }
-
-            //TODO get thread labels
 
             $arr = array('status' => 'true', 'threads' => $threads, 'labels' => $labels);
 
@@ -248,17 +245,5 @@ class forum {
 }
 
 new forum();
-
-
-
-
-
-
-
-
-
-
-
-
 
 
