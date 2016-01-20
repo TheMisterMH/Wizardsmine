@@ -7,6 +7,7 @@ function getQueryVariable(variable){
     }
     return(false);
 }
+var threads = ['0'];
 
 $(document).ready(function(){
     var topic = getQueryVariable("topic_id");
@@ -17,31 +18,94 @@ $(document).ready(function(){
 
         for(i = 0; i < jsonObj.threads.length; i++){
 
-            $("#thread-"+i).css({
-                display: "inline"
-            });
+            var thread_id = jsonObj.threads[i].id;
 
-            var name = $("#thread-"+i+" ul li a");
-            $("#thread-"+i+" ul li:eq(0)").html(jsonObj.threads[i].id);
-            name.html(jsonObj.threads[i].name);
-            $("#thread-"+i+" ul li:eq(2)").html(jsonObj.threads[i].user_id);
-            $("#thread-"+i+" ul li:eq(3)").html(jsonObj.threads[i].post_date);
-            $("#thread-"+i+" ul li:eq(4)").html(jsonObj.threads[i].web_name);
+            if (check_sticky(jsonObj, i)){
 
-            name.attr("href", "http://localhost/wizardsmine/forum/threads.html?thread_id=" + jsonObj.threads[i].id);
+                var counter = threads.length-1;
 
-            if (jsonObj.labels[i].got_label == "true"){
-                for (loop = 0; loop < jsonObj.labels[i][i].length; loop++){
+                add_thread(jsonObj, i, counter);
 
-                    var label_type = jsonObj.labels[i][i][loop].label_type;
+                threads[counter] = thread_id;
+                threads[counter+1] = '0';
+            }
+        }
 
-                    $("#thread-"+i+" ul .labels .label-"+label_type).css({
-                        display: "inline"
-                    });
+        for(i = 0; i < jsonObj.threads.length; i++){
 
-                    //alert(jsonObj.labels[i][i][loop].label_type + "\n" + jsonObj.labels[i][i][loop].thread_id);
-                }
+            thread_id = jsonObj.threads[i].id;
+
+            if (!check_array(thread_id)){
+
+                counter = threads.length-1;
+
+                add_thread(jsonObj, i, counter);
+
+                threads[counter] = thread_id;
+                threads[counter+1] = '0';
+
+            } else {
+                alert("NOPE"+ i);
             }
         }
     });
 });
+
+function add_thread(jsonObj, i, el_id){
+    $("#thread-"+el_id).css({
+        display: "inline"
+    });
+
+    var name = $("#thread-"+el_id+" ul li a");
+    $("#thread-"+el_id+" ul li:eq(0)").html(jsonObj.threads[i].id);
+    name.html(jsonObj.threads[i].name);
+    $("#thread-"+el_id+" ul li:eq(2)").html(jsonObj.threads[i].user_id);
+    $("#thread-"+el_id+" ul li:eq(3)").html(jsonObj.threads[i].post_date);
+    $("#thread-"+el_id+" ul li:eq(4)").html(jsonObj.threads[i].web_name);
+
+    name.attr("href", "http://localhost/wizardsmine/forum/threads.html?thread_id=" + jsonObj.threads[i].id);
+
+    if (jsonObj.labels[i].got_label == "true"){
+        for (loop = 0; loop < jsonObj.labels[i][i].length; loop++){
+
+            var label_type = jsonObj.labels[i][i][loop].label_type;
+
+            $("#thread-"+el_id+" ul .labels .label-"+label_type).css({
+                display: "inline"
+            });
+
+            //alert(jsonObj.labels[i][i][loop].label_type + "\n" + jsonObj.labels[i][i][loop].thread_id);
+        }
+    }
+}
+
+function check_array(thread_id) {
+    for(loop = 0; loop < threads.length; loop++){
+
+        if(threads[loop] == thread_id){
+            return true;
+        }
+    }
+    return false;
+}
+
+function check_sticky(jsonObj, i){
+
+    if (jsonObj.labels[i].got_label == "true") {
+        for (loop = 0; loop < jsonObj.labels[i][i].length; loop++) {
+
+            var label_type = jsonObj.labels[i][i][loop].label_type;
+
+            if (label_type == "sticky") {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+
+
+
+
+
