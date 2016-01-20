@@ -1,6 +1,6 @@
 <?php
 
-class thread {
+class threads {
 
     private $web_db_connection;
     private $mc_db_connection;

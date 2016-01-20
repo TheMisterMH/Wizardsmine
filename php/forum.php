@@ -5,6 +5,7 @@ require 'forum/categories.inc.php';
 require 'forum/topics.inc.php';
 require 'forum/thread.inc.php';
 require 'forum/post-handling.inc.php';
+require 'forum/forum-navigation.inc.php';
 
 class forum {
 
@@ -40,6 +41,10 @@ class forum {
 
                 case "update_editor_post":
                     $this->insert_edited_post();
+                    break;
+
+                case "navigation":
+                    $this->navigation();
                     break;
             }
         }
@@ -111,12 +116,15 @@ class forum {
         $thread_id = $_POST['thread_id'];
 
         try {
-            $thread = new thread();
+            $thread = new threads();
             $thread->set_db_connections();
 
             if(!$thread->thread_validation($thread_id)){
                 throw new Exception("No valid thread");
             }
+
+            $navigation = new forum_nav();
+            $topic = $navigation->get_topic($thread_id);
 
             $sess = new session();
             if(!$sess->check_session()){
@@ -125,7 +133,7 @@ class forum {
                 $user_id = $sess->get_user_id();
             }
 
-            $arr = array('posts' => $thread->get_posts($thread_id), 'user_id' => $user_id);
+            $arr = array('posts' => $thread->get_posts($thread_id), 'user_id' => $user_id, 'topic' => $topic);
 
             echo json_encode($arr);
 
@@ -145,7 +153,7 @@ class forum {
 
         try {
 
-            $thread = new thread();
+            $thread = new threads();
             $thread->set_db_connections();
             if(!$thread->thread_validation($thread_id)){
                 throw new Exception("Invalid thread");
@@ -183,8 +191,15 @@ class forum {
                 throw new Exception("You dont own this post");
             }
 
+            $navigation = new forum_nav();
+            $threads = $navigation->get_thread($post_id);
+
+            $thread_id = $threads[0]['thread_id'];
+
+            $topic = $navigation->get_topic($thread_id);
+
             $post = $post_handling->load_editor_post($post_id);
-            $arr = array( 'status' => 'true', 'post' => $post);
+            $arr = array( 'status' => 'true', 'post' => $post, 'thread' => $threads, 'topic' => $topic);
             echo json_encode($arr);
 
         } catch (Exception $e){
@@ -241,6 +256,30 @@ class forum {
             $arr = array( 'status' => 'false', 'error' => $e->getMessage());
             echo json_encode($arr);
         }
+    }
+
+    public function navigation(){
+        $topic_id = $_POST['topic_id'];
+        $thread_id = $_POST['thread_id'];
+
+        $navigation = new forum_nav();
+
+        if($topic_id != "false"){
+            //get shit from db
+            $topic = $navigation->get_topic_name($topic_id);
+
+            $arr = array('topic' => $topic, 'thread' => "false");
+        } else if ($thread_id != "false") {
+            //get shit from db
+            $topic = $navigation->get_topic($thread_id);
+            $thread_name = $navigation->get_thread_name($thread_id);
+
+            $arr = array('topic' => "false", 'thread' => array('thread' =>$thread_name, 'topic' => $topic));
+        } else {
+            $arr = array('topic' => "false", 'thread' => "false");
+        }
+
+        echo json_encode($arr);
     }
 }
 

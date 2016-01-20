@@ -27,24 +27,25 @@ function getQueryVariable(variable){
 }
 
 $(document).ready(function(){
-     $("#thread_reply").submit(function(){
-         var post = tinyMCE.get('forum-reply-text').getContent();
-         var thread_id = getQueryVariable("thread_id");
-         alert(post);
-         $.post('../php/forum.php', { type: "new_post", thread_id: thread_id , post: post }, function(data){
-             alert(data);
 
-             var jsonObj = $.parseJSON(data);
+    $("#thread_reply").submit(function(){
+        var post = tinyMCE.get('forum-reply-text').getContent();
+        var thread_id = getQueryVariable("thread_id");
+        alert(post);
+        $.post('../php/forum.php', { type: "new_post", thread_id: thread_id , post: post }, function(data){
+            alert(data);
 
-             if(jsonObj.status == "true"){
-                 alert("Succesfuly post submitted");
-                 location.href = "threads.html?thread_id=" + thread_id;
-             } else {
-                 alert("failed to upload post: " + jsonObj.error);
-             }
-         });
-         return false;
-     });
+            var jsonObj = $.parseJSON(data);
+
+            if(jsonObj.status == "true"){
+                alert("Succesfuly post submitted");
+                location.href = "threads.html?thread_id=" + thread_id;
+            } else {
+                alert("failed to upload post: " + jsonObj.error);
+            }
+        });
+        return false;
+    });
 
     $("#create_thread").submit(function(){
         var post = tinyMCE.get('forum-reply-text').getContent();

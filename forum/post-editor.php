@@ -27,6 +27,8 @@ if(!$sess->check_session()){
         <div id="user-menu"></div>
         <div id="main-menu"></div>
         <a href="categories.html">Forum</a>
+        <a id="topic"></a>
+        <a id="thread"></a>
 
         <form id="update_post" class="post-editor" method="post">
             <textarea id="forum-reply-text">Hello world!</textarea>

@@ -15,25 +15,22 @@ if(!$sess->check_session()){
         <script src="../js/forum/post-editor.js"></script>
         <script src="../js/menu-bar.js"></script>
         <script src="../js/main-menu.js"></script>
+        <script src="../js/forum/navigation.js"></script>
         <title>Forum - Wizardsmine</title>
         <link rel="shortcut icon" type="image/png" href="http://localhost/wizardsmine/img/icon.png">
         <link rel="stylesheet" type="text/css" href="../css/style.css">
-
-        <script>
-            function getdata(){
-                alert(tinyMCE.get('forum-reply-text').getContent());
-            }
-        </script>
-
     </head>
+
     <body>
         <div id="user-menu"></div>
         <div id="main-menu"></div>
         <a href="categories.html">Forum</a>
+        <a id="topic"></a>
+        <a id="thread"></a>
+
         <form id="thread_reply" class="post-reply" method="post">
             <textarea id="forum-reply-text">Hello world!</textarea>
             <input type="submit" value="Submit">
         </form>
-        <button onclick="getdata()">Get data</button>
     </body>
 </html>

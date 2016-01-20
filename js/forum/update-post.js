@@ -1,5 +1,7 @@
 
 var post;
+var thread;
+var topic;
 
 function getQueryVariable(variable){
     var query = window.location.search.substring(1);
@@ -19,9 +21,19 @@ $.ajax({
 }).done(function(data){
     alert(data);
     var jsonObj = $.parseJSON(data);
-    post= jsonObj.post
+    post = jsonObj.post;
+    topic = jsonObj.topic[0];
+    thread = jsonObj.thread[0];
 });
 
 $(document).ready(function(){
     $("#forum-reply-text").val(post);
+    var thread_ref = $("#thread");
+    var topic_ref = $("#topic");
+
+    thread_ref.html(thread.name);
+    topic_ref.html(topic.name);
+
+    thread_ref.attr("href", "http://localhost/wizardsmine/forum/threads.html?thread_id=" + thread.thread_id);
+    topic_ref.attr("href", "http://localhost/wizardsmine/forum/topics.html?topic_id=" + topic.topic_id);
 });
