@@ -7,7 +7,7 @@ class topics {
 
     public function get_threads($topic_id){
         //$sql = "SELECT * FROM threads WHERE topic_id='$topic_id' ORDER BY post_date ASC";
-        $sql = "SELECT threads.*,users.web_name FROM threads INNER JOIN users ON users.id=threads.user_id WHERE topic_id='$topic_id' ORDER BY post_date DESC";
+        $sql = "SELECT threads.*,users.web_name FROM threads INNER JOIN users ON users.id=threads.user_id WHERE topic_id='$topic_id' AND hidden='0' ORDER BY sticky DESC, post_date DESC";
         $stmt = $this->web_db_connection->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetchAll();

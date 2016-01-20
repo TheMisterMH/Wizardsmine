@@ -79,7 +79,7 @@ class forum {
 
             for($i = 0; $i < $thr_count; $i++) {
 
-                $thread_id = $threads[$i]['id'];
+                @$thread_id = $threads[$i]['id'];
 
                 if ($topic->thread_label_count($thread_id) != "0") {
 
