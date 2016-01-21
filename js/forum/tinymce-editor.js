@@ -16,16 +16,6 @@ tinymce.init({
     fontsize_formats: '12pt 14pt 18pt 24pt 36pt'
 });
 
-function getQueryVariable(variable){
-    var query = window.location.search.substring(1);
-    var vars = query.split("&");
-    for (var i=0;i<vars.length;i++) {
-        var pair = vars[i].split("=");
-        if(pair[0] == variable){return pair[1];}
-    }
-    return(false);
-}
-
 $(document).ready(function(){
 
     $("#thread_reply").submit(function(){
@@ -39,7 +29,7 @@ $(document).ready(function(){
 
             if(jsonObj.status == "true"){
                 alert("Succesfuly post submitted");
-                location.href = "threads.html?thread_id=" + thread_id;
+                location.href = "threads.php?thread_id=" + thread_id;
             } else {
                 alert("failed to upload post: " + jsonObj.error);
             }
@@ -60,7 +50,7 @@ $(document).ready(function(){
 
             if(jsonObj.status == "true"){
                 alert("Succesfuly thread created");
-                location.href = "threads.html?thread_id=" + jsonObj.thread_id;
+                location.href = "threads.php?thread_id=" + jsonObj.thread_id;
             } else {
                 alert("Failed to create thread: " + jsonObj.error);
             }
@@ -74,6 +64,7 @@ $(document).ready(function(){
 
         $.post('../php/forum.php', { type: "update_editor_post", post: post, post_id: post_id }, function(data){
             alert(data);
+            //TODO redirect back to thread
         });
         return false;
     });

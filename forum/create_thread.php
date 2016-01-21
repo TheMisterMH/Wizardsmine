@@ -11,20 +11,31 @@ if(!$sess->check_session()){
 <html>
     <head>
         <script src="../js/jquery.js"></script>
+        <script src="../js/forum/forum-navigation.js"></script>
+
+
         <script src="../js/tinymce/tinymce.min.js"></script>
-        <script src="../js/forum/post-editor.js"></script>
+        <script src="../js/forum/tinymce-editor.js"></script>
+
         <script src="../js/menu-bar.js"></script>
         <script src="../js/main-menu.js"></script>
-        <script src="../js/forum/navigation.js"></script>
+
         <title>Forum - Wizardsmine</title>
         <link rel="shortcut icon" type="image/png" href="http://localhost/wizardsmine/img/icon.png">
         <link rel="stylesheet" type="text/css" href="../css/style.css">
     </head>
+
     <body>
         <div id="user-menu"></div>
         <div id="main-menu"></div>
-        <a href="categories.html">Forum</a>
-        <a id="topic"></a>
+
+        <div id="forum-navigation">
+            <ul>
+                <li><a id="forum-nav-main" href="http://localhost/wizardsmine/forum/home.php">Forum</a></li>
+                <li><a id="forum-nav-categorie"></a></li>
+                <li><a id="forum-nav-topic"></a></li>
+            </ul>
+        </div>
 
         <form id="create_thread">
             Name: <input type="text" id="thread_name">

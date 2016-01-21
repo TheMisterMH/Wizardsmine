@@ -2,9 +2,13 @@
 <html>
     <head>
         <script src="../js/jquery.js"></script>
+        <script src="../js/forum/forum-navigation.js"></script>
+
         <script src="../js/forum/topic-script.js"></script>
+
         <script src="../js/menu-bar.js"></script>
         <script src="../js/main-menu.js"></script>
+
         <title>Forum - Wizardsmine</title>
         <link rel="shortcut icon" type="image/png" href="http://localhost/wizardsmine/img/icon.png">
         <link rel="stylesheet" type="text/css" href="../css/style.css">
@@ -30,10 +34,17 @@
     <body>
         <div id="user-menu"></div>
         <div id="main-menu"></div>
-        <div>
-            <a href="categories.html">Forum</a>
-            <button onclick="location.href = 'http://localhost/wizardsmine/forum/create_thread.php?topic_id=' + getQueryVariable('topic_id')">New thread</button>
+
+        <div id="forum-navigation">
+            <ul>
+                <li><a id="forum-nav-main" href="http://localhost/wizardsmine/forum/home.php">Forum</a></li>
+                <li><a id="forum-nav-categorie"></a></li>
+                <li><a id="forum-nav-topic"></a></li>
+            </ul>
         </div>
+
+        <button onclick="location.href = 'http://localhost/wizardsmine/forum/create_thread.php?topic_id=' + getQueryVariable('topic_id')">New thread</button>
+
         <div id="threads">
             <div class="thread" id="thread-0">
                 <ul>

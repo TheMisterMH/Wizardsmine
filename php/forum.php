@@ -123,9 +123,6 @@ class forum {
                 throw new Exception("No valid thread");
             }
 
-            $navigation = new forum_nav();
-            $topic = $navigation->get_topic($thread_id);
-
             $sess = new session();
             if(!$sess->check_session()){
                 $user_id = -1;
@@ -133,7 +130,7 @@ class forum {
                 $user_id = $sess->get_user_id();
             }
 
-            $arr = array('posts' => $thread->get_posts($thread_id), 'user_id' => $user_id, 'topic' => $topic);
+            $arr = array('posts' => $thread->get_posts($thread_id), 'user_id' => $user_id);
 
             echo json_encode($arr);
 
@@ -191,15 +188,8 @@ class forum {
                 throw new Exception("You dont own this post");
             }
 
-            $navigation = new forum_nav();
-            $threads = $navigation->get_thread($post_id);
-
-            $thread_id = $threads[0]['thread_id'];
-
-            $topic = $navigation->get_topic($thread_id);
-
             $post = $post_handling->load_editor_post($post_id);
-            $arr = array( 'status' => 'true', 'post' => $post, 'thread' => $threads, 'topic' => $topic);
+            $arr = array( 'status' => 'true', 'post' => $post);
             echo json_encode($arr);
 
         } catch (Exception $e){
@@ -259,27 +249,53 @@ class forum {
     }
 
     public function navigation(){
-        $topic_id = $_POST['topic_id'];
-        $thread_id = $_POST['thread_id'];
+        try {
+            $navigation = new forum_nav();
 
-        $navigation = new forum_nav();
+            switch($_POST['nav_type']){
+                case "topic":
+                    //get categorie and topic name
+                    $topic_id = $_POST['nav_value'];
+                    $topic = $navigation->get_topic_name($topic_id);
+                    $categorie = $navigation->get_categorie($topic_id);
 
-        if($topic_id != "false"){
-            //get shit from db
-            $topic = $navigation->get_topic_name($topic_id);
+                    $result = array('categorie' => $categorie, 'topic' => $topic);
 
-            $arr = array('topic' => $topic, 'thread' => "false");
-        } else if ($thread_id != "false") {
-            //get shit from db
-            $topic = $navigation->get_topic($thread_id);
-            $thread_name = $navigation->get_thread_name($thread_id);
+                    break;
+                case "thread":
+                    //get categorie, topic and thread name
+                    $thread_id = $_POST['nav_value'];
+                    $thread = $navigation->get_thread_name($thread_id);
+                    $topic = $navigation->get_topic($thread_id);
+                    $topic_id = $topic[0]['topic_id'];
+                    $categorie = $navigation->get_categorie($topic_id);
 
-            $arr = array('topic' => "false", 'thread' => array('thread' =>$thread_name, 'topic' => $topic));
-        } else {
-            $arr = array('topic' => "false", 'thread' => "false");
+                    $result = array('categorie' => $categorie, 'topic' => $topic, 'thread' => $thread);
+
+                    break;
+                case "post":
+                    //get categorie, topic, thread and post name
+                    $post_id = $_POST['nav_value'];
+                    $thread = $navigation->get_thread($post_id);
+                    $thread_id = $thread[0]['thread_id'];
+                    $topic = $navigation->get_topic($thread_id);
+                    $topic_id = $topic[0]['topic_id'];
+                    $categorie = $navigation->get_categorie($topic_id);
+
+                    $result = array('categorie' => $categorie, 'topic' => $topic, 'thread' => $thread);
+
+                    break;
+                default:
+                    throw new Exception("No navigation type specified");
+            }
+
+            $arr = array( 'status' => 'true', 'result' => $result);
+            echo json_encode($arr);
+
+        } catch (Exception $e) {
+            $arr = array( 'status' => 'false', 'error' => $e->getMessage());
+            echo json_encode($arr);
         }
-
-        echo json_encode($arr);
     }
 }
 

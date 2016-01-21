@@ -41,6 +41,14 @@ class forum_nav {
         return $result;
     }
 
+    public function get_categorie($topic_id){
+        $sql = "SELECT categories.id,categories.name FROM topics INNER JOIN categories ON categories.id=topics.cat_id WHERE topics.id='$topic_id'";
+        $stmt = $this->web_db_connection->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        return $result;
+    }
+
     public function set_db_connections(){
         $db = new database();
 

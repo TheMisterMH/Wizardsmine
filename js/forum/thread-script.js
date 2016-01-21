@@ -1,23 +1,9 @@
-function getQueryVariable(variable){
-    var query = window.location.search.substring(1);
-    var vars = query.split("&");
-    for (var i=0;i<vars.length;i++) {
-        var pair = vars[i].split("=");
-        if(pair[0] == variable){return pair[1];}
-    }
-    return(false);
-}
-
 $(document).ready(function(){
     var thread = getQueryVariable("thread_id");
     $.post('../php/forum.php', { type: "thread", thread_id: thread }, function(data){
         //alert(data);
 
         var jsonObj = $.parseJSON(data);
-
-        var topic = $("#topic_ref");
-        topic.html(jsonObj.topic[0].name);
-        topic.attr("href", "http://localhost/wizardsmine/forum/topics.html?topic_id=" + jsonObj.topic[0].topic_id);
 
         for(i = 0; i < jsonObj.posts.length; i++){
 
@@ -53,5 +39,5 @@ $(document).ready(function(){
     });
 });
 function to_post(post_id){
-    location.href = "http://localhost/wizardsmine/forum/post-editor.php?post_id=" + post_id;
+    location.href = "http://localhost/wizardsmine/forum/update-post.php?post_id=" + post_id;
 }

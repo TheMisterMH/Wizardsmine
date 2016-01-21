@@ -1,13 +1,3 @@
-function getQueryVariable(variable){
-    var query = window.location.search.substring(1);
-    var vars = query.split("&");
-    for (var i=0;i<vars.length;i++) {
-        var pair = vars[i].split("=");
-        if(pair[0] == variable){return pair[1];}
-    }
-    return(false);
-}
-
 
 $(document).ready(function(){
     var topic = getQueryVariable("topic_id");
@@ -29,7 +19,7 @@ $(document).ready(function(){
             $("#thread-"+i+" ul li:eq(3)").html(jsonObj.threads[i].post_date);
             $("#thread-"+i+" ul li:eq(4)").html(jsonObj.threads[i].web_name);
 
-            name.attr("href", "http://localhost/wizardsmine/forum/threads.html?thread_id=" + jsonObj.threads[i].id);
+            name.attr("href", "http://localhost/wizardsmine/forum/threads.php?thread_id=" + jsonObj.threads[i].id);
 
             if (jsonObj.labels[i].got_label == "true"){
                 for (loop = 0; loop < jsonObj.labels[i][i].length; loop++){
